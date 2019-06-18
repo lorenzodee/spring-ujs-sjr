@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<!-- This keeps Spring Boot tests from being too noisy before starting up -->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+</configuration>

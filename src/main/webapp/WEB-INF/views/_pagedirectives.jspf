@@ -1,0 +1,19 @@
+<%--
+In JSP 2.1, setting "trimDirectiveWhitespaces" page directive to true
+eliminates the extra white space from page/tag directives. For example, a
+carriage return after a "taglib" directive would be included in the response
+output as an extra line. Setting "trimDirectiveWhitespace" to true will remove
+this undesired extra line from the response output.
+
+Setting "isErrorPage" page directive to true circumvents JSP 2.3 requirement
+that JSPs only permit GET, POST, and HEAD.
+--%>
+<%@ page
+	pageEncoding="UTF-8"
+	isELIgnored="false"
+	language="java"
+	session="false"
+	trimDirectiveWhitespaces="true"
+	isErrorPage="true"
+%>
+<%@ include file="/WEB-INF/_taglibs.jspf" %>
