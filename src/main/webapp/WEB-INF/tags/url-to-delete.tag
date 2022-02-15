@@ -9,7 +9,7 @@
 </spring:url>
 <c:choose>
     <c:when test="${not empty var}">
-        ${pageContext.request.setAttribute(var, _href)}
+        <c:set property="${var}" target="${requestScope}" value="${_href}" />
     </c:when>
     <c:otherwise>
     	${_href}
