@@ -17,7 +17,7 @@
 		<div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
 			<p><tags:link-to-back>&laquo; Back</tags:link-to-back></p>
 			<h1>Create New Thing</h1>
-			<jsp:include page="_form.jsp" />
+			<jsp:include page="_form.html.jsp" />
 		</div>
 	</div>
 </div>

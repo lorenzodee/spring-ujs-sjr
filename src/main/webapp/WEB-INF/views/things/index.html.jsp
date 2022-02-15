@@ -37,7 +37,8 @@
 				<a href="<c:url value='/things/${thing.id}?edit' />" data-remote="true">Edit</a>
 			</td>
 			<td>
-				<a href="<c:url value='/things/${thing.id}?delete' />" data-remote="true" data-method="delete" data-confirm="Are you sure?">Remove</a>
+				<tags:url-to-delete oid="${thing.id}" path="/things" var="deleteUrl" />
+				<a href="${deleteUrl}" data-remote="true" data-method="delete" data-confirm="Are you sure?">Remove</a>
 			</td>
 		</tr>
 		</c:forEach>

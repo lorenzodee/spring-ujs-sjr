@@ -3,7 +3,7 @@
 
 <c:set var="jsHtml">
 	<spring:escapeBody htmlEscape="false" javaScriptEscape="true">
-		<jsp:include page="_form.jsp" />
+		<jsp:include page="_form.html.jsp" />
 		<%-- render the same form with error messages --%>
 	</spring:escapeBody>
 </c:set>
