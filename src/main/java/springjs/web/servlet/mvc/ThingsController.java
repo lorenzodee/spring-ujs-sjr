@@ -42,7 +42,7 @@ class ThingsController {
 
 	@GetMapping
 	String index(Pageable pageable, Model model) {
-		model.addAttribute("thingsPage", thingRepository.findAll(pageable));
+		model.addAttribute("thingsPage", thingRepository.findAll(Pageable.unpaged()));
 		return "things/index";
 	}
 
@@ -63,20 +63,42 @@ class ThingsController {
 
 	@PostMapping
 	String save(@Valid Thing thing, BindingResult bindingResult,
-			Model model, RedirectAttributes redirectAttributes) {
+			Model model, RequestedMediaTypes requestedMediaTypes,
+			RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
 			prepareFormModels(model);
 			return "things/create";
 		}
-		thing = thingRepository.save(thing);
-		// @formatter:off
+		final Thing newThing = thingRepository.save(thing);
+		return requestedMediaTypes.respondTo(
+			RequestedMediaTypes.TEXT_JAVASCRIPT, () -> {
+				model.addAttribute("thingsPage", thingRepository.findAll(Pageable.unpaged()));
+				return "things/save"; // save.js.jsp
+			},
+			() -> {
+				// @formatter:off
+				/*
+				redirectAttributes.addFlashAttribute("message",
+						this.messageSource.getMessage("thing.created",
+								new Object[] { thing.getId() }, locale));
+				*/
+				// @formatter:on
+				redirectAttributes.addAttribute("id", newThing.getId());
+				return "redirect:/things/{id}";
+			});
 		/*
-		redirectAttributes.addFlashAttribute("message",
-				this.messageSource.getMessage("thing.created",
-						new Object[] { thing.getId() }, locale));
+		if (requestedMediaTypes.acceptsTextJavascript()) {
+			return "things/save"; // save.js.jsp
+		}
+		else {
+			// @formatter:off
+			redirectAttributes.addFlashAttribute("message",
+					this.messageSource.getMessage("thing.created",
+							new Object[] { thing.getId() }, locale));
+			// @formatter:on
+			return "redirect:/things";
+		}
 		*/
-		// @formatter:on
-		return "redirect:/things";
 	}
 
 	@GetMapping(path = ID_REGEX_UUID, params = "edit")
@@ -90,28 +112,52 @@ class ThingsController {
 
 	@PutMapping(path = ID_REGEX_UUID)
 	String update(@PathVariable UUID id, @Valid Thing thing, BindingResult bindingResult,
-			Model model, RedirectAttributes redirectAttributes) {
+			Model model, RequestedMediaTypes requestedMediaTypes,
+			RedirectAttributes redirectAttributes) {
 		thing.setId(id);
 		if (bindingResult.hasErrors()) {
 			prepareFormModels(model);
 			return "things/edit";
 		}
-		thing = thingRepository.save(thing);
-		// @formatter:off
-		/*
-		redirectAttributes.addFlashAttribute("message",
-				this.messageSource.getMessage("thing.updated",
-						new Object[] { thing.getId() }, locale));
-		*/
-		// @formatter:on
-		return "redirect:/things";
+		final Thing updatedThing = thingRepository.save(thing);
+		return requestedMediaTypes.respondTo(
+			RequestedMediaTypes.TEXT_JAVASCRIPT, () -> {
+				model.addAttribute("thingsPage", thingRepository.findAll(Pageable.unpaged()));
+				return "things/update"; // update.js.jsp
+			},
+			() -> {
+				// @formatter:off
+				/*
+				redirectAttributes.addFlashAttribute("message",
+						this.messageSource.getMessage("thing.created",
+								new Object[] { thing.getId() }, locale));
+				return "redirect:/things";
+				*/
+				// @formatter:on
+				redirectAttributes.addAttribute("id", updatedThing.getId());
+				return "redirect:/things/{id}";
+			});
 	}
 
 	@DeleteMapping(path = ID_REGEX_UUID)
-	String delete(@PathVariable UUID id) {
+	String delete(@PathVariable UUID id, RequestedMediaTypes requestedMediaTypes) {
 		try {
 			this.thingRepository.deleteById(id);
-			return "redirect:/things";
+			return requestedMediaTypes.respondTo(
+					RequestedMediaTypes.TEXT_JAVASCRIPT, () -> {
+						return "things/delete"; // delete.js.jsp
+					},
+					() -> {
+						// @formatter:off
+						/*
+						redirectAttributes.addFlashAttribute("message",
+								this.messageSource.getMessage("thing.deleted",
+										new Object[] { id }, locale));
+						return "redirect:/things";
+						*/
+						// @formatter:on
+						return "redirect:/things";
+					});
 		}
 		catch (EmptyResultDataAccessException ex) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);

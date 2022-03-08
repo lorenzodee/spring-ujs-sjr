@@ -14,38 +14,8 @@
 <body>
 <div class="container">
 	<h1>Things</h1>
-	<c:if test="${empty thingsPage.content}">
-	<p>There are no things yet.</p>
-	</c:if>
-	<c:if test="${not empty thingsPage.content}">
-	<table id="things" class="table">
-		<tr>
-			<th>Name</th>
-			<th><span class="sr-only">Show</span></th>
-			<th><span class="sr-only">Edit</span></th>
-			<th><span class="sr-only">Remove</span></th>
-		</tr>
-		<c:forEach var="thing" items="${thingsPage.content}">
-		<tr id="${thing.id}">
-			<td>
-				<c:out value="${thing.name}"/>
-			</td>
-			<td>
-				<a href="<c:url value='/things/${thing.id}' />">Show</a>
-			</td>
-			<td>
-				<a href="<c:url value='/things/${thing.id}?edit' />" data-remote="true">Edit</a>
-			</td>
-			<td>
-				<tags:url-to-delete oid="${thing.id}" path="/things" var="deleteUrl" />
-				<a href="${deleteUrl}" data-remote="true" data-method="delete" data-confirm="Are you sure?">Remove</a>
-			</td>
-		</tr>
-		</c:forEach>
-	</table>
-	</c:if>
-	<br/>
-	<p><a id="add-thing-button" class="btn btn-secondary" href="<c:url value='/things?create' />">Create...</a></p>
+	<jsp:include page="_index.html.jsp" />
+	<p><a id="add-thing-button" class="btn btn-secondary" href="<c:url value='/things?create' />" data-remote="true">Create...</a></p>
 </div>
 <div id="modalForm" class="modal" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">

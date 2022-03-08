@@ -15,7 +15,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-			<p><tags:link-to-back>&laquo; Back</tags:link-to-back></p>
+			<p><a href="<c:url value='/things' />">&laquo; Things</a></p>
 			<h1><c:out value="${thing.name}" /></h1>
 			<c:if test="${empty thing.description}">
 			<p class="text-muted">No description was given.</p>
@@ -25,7 +25,7 @@
 			</c:if>
 			<p>
 				<a href="<c:url value='/things/${thing.id}?edit' />">Edit</a> |
-				<a href="<c:url value='/things/${thing.id}?delete' />">Remove</a>
+				<a href="<c:url value='/things/${thing.id}' />" data-method="delete">Remove</a>
 			</p>
 		</div>
 	</div>
